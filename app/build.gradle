@@ -3,11 +3,11 @@ plugins {
 }
 
 android {
-    namespace 'com.zypher.shortnotes'
+    namespace 'com.kneuen.smartnotes'
     compileSdk 33
 
     defaultConfig {
-        applicationId 'com.example.shortnotes'
+        applicationId 'com.kneuen.smartnotes'
         minSdk 24
         targetSdk 33
         versionCode 1

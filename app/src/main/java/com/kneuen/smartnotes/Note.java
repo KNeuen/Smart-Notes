@@ -1,4 +1,4 @@
-package com.zypher.shortnotes;
+package com.kneuen.smartnotes;
 
 public class Note {
     private String title;

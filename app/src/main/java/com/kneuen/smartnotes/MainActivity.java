@@ -1,4 +1,4 @@
-package com.zypher.shortnotes;
+package com.kneuen.smartnotes;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
