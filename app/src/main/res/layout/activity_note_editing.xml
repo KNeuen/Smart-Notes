@@ -8,6 +8,38 @@
     tools:context=".NoteEditingActivity">
 
     <!-- Formatting Buttons -->
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+    <!-- Left Align Button -->
+    <Button
+        android:id="@+id/l_align"
+        android:layout_width="138dp"
+        android:layout_height="wrap_content"
+        android:onClick="buttonAlignmentLeft"
+        android:text="Left" />
+
+    <!-- Middle Align Button -->
+        <Button
+            android:id="@+id/m_align"
+            android:layout_width="138dp"
+            android:layout_height="wrap_content"
+            android:onClick="buttonAlignmentCenter"
+            android:text="Middle" />
+
+    <!-- Right Align Button -->
+        <Button
+            android:id="@+id/r_align"
+            android:layout_width="128dp"
+            android:layout_height="wrap_content"
+            android:onClick="buttonAlignmentRight"
+            android:text="Right" />
+    
+      </LinearLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -65,40 +97,9 @@
     <EditText
         android:id="@+id/contentEdit"
         android:layout_width="match_parent"
-        android:layout_height="132dp">
+        android:layout_height="246dp">
 
     </EditText>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-    <!-- Left Align Button -->
-    <Button
-        android:id="@+id/l_align"
-        android:layout_width="138dp"
-        android:layout_height="wrap_content"
-        android:onClick="buttonAlignmentLeft"
-        android:text="Left" />
-
-    <!-- Middle Align Button -->
-        <Button
-            android:id="@+id/m_align"
-            android:layout_width="138dp"
-            android:layout_height="wrap_content"
-            android:onClick="buttonAlignmentCenter"
-            android:text="Middle" />
-
-    <!-- Right Align Button -->
-        <Button
-            android:id="@+id/r_align"
-            android:layout_width="128dp"
-            android:layout_height="wrap_content"
-            android:onClick="buttonAlignmentRight"
-            android:text="Right" />
-    
-      </LinearLayout>
 
     <!--        <EditText-->
     <!--            android:id="@+id/noteEdit"-->
