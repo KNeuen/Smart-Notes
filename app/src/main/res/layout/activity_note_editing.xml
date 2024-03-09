@@ -1,114 +1,100 @@
-<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:padding="16dp"
     tools:context=".NoteEditingActivity">
 
-    <!-- Formatting Buttons -->
-
+    <!-- Formatting Buttons Container -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:gravity="center">
 
-    <!-- Left Align Button -->
-    <Button
-        android:id="@+id/l_align"
-        android:layout_width="138dp"
-        android:layout_height="wrap_content"
-        android:onClick="buttonAlignmentLeft"
-        android:text="Left" />
+        <!-- Text Alignment Buttons -->
+        <!-- Styling is applied via a style resource for consistency -->
+        <Button
+            android:id="@+id/l_align"
+            style="@style/TextAlignmentButton"
+            android:onClick="buttonAlignmentLeft"
+            android:text="Left" />
 
-    <!-- Middle Align Button -->
         <Button
             android:id="@+id/m_align"
-            android:layout_width="138dp"
-            android:layout_height="wrap_content"
+            style="@style/TextAlignmentButton"
             android:onClick="buttonAlignmentCenter"
             android:text="Middle" />
 
-    <!-- Right Align Button -->
         <Button
             android:id="@+id/r_align"
-            android:layout_width="128dp"
-            android:layout_height="wrap_content"
+            style="@style/TextAlignmentButton"
             android:onClick="buttonAlignmentRight"
             android:text="Right" />
-    
-      </LinearLayout>
+    </LinearLayout>
 
+    <!-- Text Formatting Buttons Container -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_marginTop="8dp">
 
-        <!-- Bold Button -->
+        <!-- Text Style Buttons -->
+        <!-- Styling is applied via a style resource for consistency -->
+
         <Button
             android:id="@+id/btn_bold"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            style="@style/TextStyleButton"
             android:onClick="buttonBold"
             android:text="Bold"
             android:textStyle="bold" />
 
-        <!-- Italic Button -->
         <Button
             android:id="@+id/btn_italic"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            style="@style/TextStyleButton"
             android:onClick="buttonItalics"
             android:text="Italics"
+            android:textAppearance="@style/TextAppearance.AppCompat.Small"
             android:textStyle="italic" />
-
-        <!-- Underline Button -->
 
         <Button
             android:id="@+id/btn_underline"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            style="@style/TextStyleButton"
             android:onClick="buttonUnderline"
-            android:text="Underline" />
+            android:text="Underline"
+            android:textAppearance="@style/TextAppearance.AppCompat.Small" />
 
-        <!-- Unformat Text -->
         <Button
             android:id="@+id/btn_noformat"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            style="@style/TextStyleButton"
             android:onClick="buttonNoFormat"
-            android:text="No Format" />
-
+            android:text="Clear"
+            android:textAppearance="@style/TextAppearance.AppCompat.Small" />
     </LinearLayout>
 
+    <!-- Title Editor -->
     <EditText
         android:id="@+id/titleEdit"
         android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:hint="title"
+        android:layout_height="wrap_content"
+        android:hint="Enter title here"
         android:inputType="text"
-        android:textSize="24sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0"></EditText>
+        android:layout_marginTop="16dp"
+        android:textSize="24sp" />
 
+    <!-- Content Editor -->
     <EditText
         android:id="@+id/contentEdit"
         android:layout_width="match_parent"
-        android:layout_height="246dp">
-
-    </EditText>
-
-    <!--        <EditText-->
-    <!--            android:id="@+id/noteEdit"-->
-    <!--            android:layout_width="match_parent"-->
-    <!--            android:layout_height="match_parent"-->
-    <!--            android:layout_marginTop="160dp"-->
-    <!--            android:inputType="textMultiLine"-->
-    <!--            app:layout_constraintTop_toBottomOf="@+id/titleEdit"-->
-    <!--            tools:layout_editor_absoluteX="0dp"></EditText>-->
-
+        android:layout_height="0dp"
+        android:layout_marginTop="8dp"
+        android:layout_weight="1"
+        android:gravity="top"
+        android:hint="Start writing..."
+        android:inputType="textMultiLine" />
 
 </LinearLayout>
