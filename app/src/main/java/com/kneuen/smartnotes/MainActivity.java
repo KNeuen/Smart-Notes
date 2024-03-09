@@ -105,6 +105,8 @@ public class MainActivity extends AppCompatActivity {
         titleTextView.setText(note.getTitle());
         contentTextView.setText(note.getContent());
 
+
+
         noteView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
@@ -113,9 +115,45 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        noteView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showEditDialog(note);
+            }
+        });
+
         notesContainer.addView(noteView);
     }
 
+    private void showEditDialog(final Note note) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Edit Note");
+
+        View dialogView = getLayoutInflater().inflate(R.layout.note_edit, null);
+        final EditText editTitle = dialogView.findViewById(R.id.editTitle);
+        final EditText editContent = dialogView.findViewById(R.id.editContent);
+
+        editTitle.setText(note.getTitle());
+        editContent.setText(note.getContent());
+
+        builder.setView(dialogView)
+                .setPositiveButton("Save", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int id) {
+                        note.setTitle(editTitle.getText().toString());
+                        note.setContent(editContent.getText().toString());
+                        saveNotesToPreferences();
+                        refreshNoteViews();
+                    }
+                })
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+
+        builder.create().show();
+    }
     private void showNoteOptionsDialog(final Note note) {
         String[] options = {"Delete", "Pin"};
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
