@@ -14,17 +14,21 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.widget.EditText;
 
-import android.text.Spannable;
-import android.text.SpannableString;
-import android.text.style.StyleSpan;
 import android.graphics.Typeface;
+import android.os.Bundle;
+import android.text.Spannable;
+import android.text.SpannableStringBuilder;
+import android.text.style.StyleSpan;
+import android.text.style.UnderlineSpan;
 import android.view.View;
-import android.widget.Button;
+import android.widget.EditText;
 
 import java.util.UUID;
 
 public class NoteEditingActivity extends AppCompatActivity {
     Note note;
+    private EditText editText;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +53,8 @@ public class NoteEditingActivity extends AppCompatActivity {
 
         editTitle.setText(note.getTitle());
         editContent.setText(note.getContent());
+
+        editText = editContent;
 
         editTitle.addTextChangedListener(new TextWatcher() {
             @Override
@@ -87,15 +93,6 @@ public class NoteEditingActivity extends AppCompatActivity {
             }
         });
 
-        // Initialize the bold button
-        Button boldButton = findViewById(R.id.btn_bold);
-        boldButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                applyBoldStyle();
-            }
-        });
-
     }
     private void saveNotesToPreferences() {
         SharedPreferences sharedPreferences = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
@@ -112,16 +109,57 @@ public class NoteEditingActivity extends AppCompatActivity {
         editor.apply();
     }
 
-    private void applyBoldStyle() {
-        EditText editContent = findViewById(R.id.contentEdit);
-        int start = editContent.getSelectionStart();
-        int end = editContent.getSelectionEnd();
+    public void buttonBold(View view){
+        Spannable spannableString = new SpannableStringBuilder(editText.getText());
+        spannableString.setSpan(new StyleSpan(Typeface.BOLD),
+                editText.getSelectionStart(),
+                editText.getSelectionEnd(),
+                0);
 
-        // Apply the bold style to the selected text
-        SpannableString spannableString = new SpannableString(editContent.getText());
-        spannableString.setSpan(new StyleSpan(Typeface.BOLD), start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-
-        editContent.setText(spannableString);
-        editContent.setSelection(start, end); // Keep the text selected
+        editText.setText(spannableString);
     }
+    public void buttonItalics(View view){
+        Spannable spannableString = new SpannableStringBuilder(editText.getText());
+        spannableString.setSpan(new StyleSpan(Typeface.ITALIC),
+                editText.getSelectionStart(),
+                editText.getSelectionEnd(),
+                0);
+
+        editText.setText(spannableString);
+
+    }
+    public void buttonUnderline(View view){
+        Spannable spannableString = new SpannableStringBuilder(editText.getText());
+        spannableString.setSpan(new UnderlineSpan(),
+                editText.getSelectionStart(),
+                editText.getSelectionEnd(),
+                0);
+
+        editText.setText(spannableString);
+    }
+
+    public void buttonNoFormat(View view){
+        String stringText = editText.getText().toString();
+        editText.setText(stringText);
+    }
+
+
+    public void buttonAlignmentLeft(View view){
+        editText.setTextAlignment(View.TEXT_ALIGNMENT_TEXT_START);
+        Spannable spannableString = new SpannableStringBuilder(editText.getText());
+        editText.setText(spannableString);
+    }
+
+    public void buttonAlignmentCenter(View view){
+        editText.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+        Spannable spannableString = new SpannableStringBuilder(editText.getText());
+        editText.setText(spannableString);
+    }
+
+    public void buttonAlignmentRight(View view){
+        editText.setTextAlignment(View.TEXT_ALIGNMENT_TEXT_END);
+        Spannable spannableString = new SpannableStringBuilder(editText.getText());
+        editText.setText(spannableString);
+    }
+
 }

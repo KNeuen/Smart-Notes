@@ -2,9 +2,9 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".NoteEditingActivity">
 
     <!-- Formatting Buttons -->
@@ -18,35 +18,35 @@
             android:id="@+id/btn_bold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="B" />
+            android:onClick="buttonBold"
+            android:text="Bold"
+            android:textStyle="bold" />
 
         <!-- Italic Button -->
         <Button
             android:id="@+id/btn_italic"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="I" />
+            android:onClick="buttonItalics"
+            android:text="Italics"
+            android:textStyle="italic" />
 
         <!-- Underline Button -->
+
         <Button
             android:id="@+id/btn_underline"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="U" />
+            android:onClick="buttonUnderline"
+            android:text="Underline" />
 
-        <!-- Bullet Button -->
+        <!-- Unformat Text -->
         <Button
-            android:id="@+id/btn_bullet"
+            android:id="@+id/btn_noformat"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="•" />
-
-        <!-- Highlight Button -->
-        <Button
-            android:id="@+id/btn_highlight"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="H" />
+            android:onClick="buttonNoFormat"
+            android:text="No Format" />
 
     </LinearLayout>
 
@@ -54,8 +54,8 @@
         android:id="@+id/titleEdit"
         android:layout_width="match_parent"
         android:layout_height="60dp"
-        android:inputType="text"
         android:hint="title"
+        android:inputType="text"
         android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -65,19 +65,49 @@
     <EditText
         android:id="@+id/contentEdit"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="132dp">
 
     </EditText>
 
-<!--        <EditText-->
-<!--            android:id="@+id/noteEdit"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="match_parent"-->
-<!--            android:layout_marginTop="160dp"-->
-<!--            android:inputType="textMultiLine"-->
-<!--            app:layout_constraintTop_toBottomOf="@+id/titleEdit"-->
-<!--            tools:layout_editor_absoluteX="0dp"></EditText>-->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
 
+    <!-- Left Align Button -->
+    <Button
+        android:id="@+id/l_align"
+        android:layout_width="138dp"
+        android:layout_height="wrap_content"
+        android:onClick="buttonAlignmentLeft"
+        android:text="Left" />
+
+    <!-- Middle Align Button -->
+        <Button
+            android:id="@+id/m_align"
+            android:layout_width="138dp"
+            android:layout_height="wrap_content"
+            android:onClick="buttonAlignmentCenter"
+            android:text="Middle" />
+
+    <!-- Right Align Button -->
+        <Button
+            android:id="@+id/r_align"
+            android:layout_width="128dp"
+            android:layout_height="wrap_content"
+            android:onClick="buttonAlignmentRight"
+            android:text="Right" />
+    
+      </LinearLayout>
+
+    <!--        <EditText-->
+    <!--            android:id="@+id/noteEdit"-->
+    <!--            android:layout_width="match_parent"-->
+    <!--            android:layout_height="match_parent"-->
+    <!--            android:layout_marginTop="160dp"-->
+    <!--            android:inputType="textMultiLine"-->
+    <!--            app:layout_constraintTop_toBottomOf="@+id/titleEdit"-->
+    <!--            tools:layout_editor_absoluteX="0dp"></EditText>-->
 
 
 </LinearLayout>
