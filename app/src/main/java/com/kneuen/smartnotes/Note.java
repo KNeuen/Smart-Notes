@@ -6,6 +6,8 @@ public class Note {
 
     private boolean isPinned;
 
+    private long creationTime;
+
     public Note() {
 
     }
@@ -37,5 +39,13 @@ public class Note {
     public Note(String title, String content) {
         this.title = title;
         this.content = content;
+    }
+
+    public long getCreationTime() {
+        return creationTime;
+    }
+
+    public void setCreationTime(long creationTime) {
+        this.creationTime = creationTime;
     }
 }

@@ -23,6 +23,8 @@ public class MainActivity extends AppCompatActivity {
     private static final String KEY_NOTE_COUNT = "NoteCount";
     private LinearLayout notesContainer;
     private List<Note> noteList;
+    private long creationTime;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,6 +82,7 @@ public class MainActivity extends AppCompatActivity {
             Note note = new Note();
             note.setTitle(title);
             note.setContent(content);
+            note.setCreationTime(System.currentTimeMillis());
 
             noteList.add(note);
             saveNotesToPreferences();
@@ -193,6 +196,16 @@ public class MainActivity extends AppCompatActivity {
         Collections.sort(noteList, new Comparator<Note>() {
             @Override
             public int compare(Note n1, Note n2) {
+                if (!n1.isPinned() && !n2.isPinned()) {
+                    return Long.compare(n1.getCreationTime(), n2.getCreationTime());
+                }
+                return 0;
+            }
+        });
+
+        Collections.sort(noteList, new Comparator<Note>() {
+            @Override
+            public int compare(Note n1, Note n2) {
                 if (n1.isPinned() && !n2.isPinned()) {
                     return -1;
                 } else if (!n1.isPinned() && n2.isPinned()) {
@@ -244,4 +257,5 @@ public class MainActivity extends AppCompatActivity {
         }
         editor.apply();
     }
+
 }
