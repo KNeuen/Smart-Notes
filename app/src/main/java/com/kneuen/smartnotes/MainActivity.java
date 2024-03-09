@@ -118,6 +118,10 @@ public class MainActivity extends AppCompatActivity {
         View noteView = getLayoutInflater().inflate(R.layout.note_item, null);
         TextView titleTextView = noteView.findViewById(R.id.titleTextView);
         titleTextView.setText(note.getTitle());
+        TextView dateTextView = noteView.findViewById(R.id.dateTextView);
+
+        titleTextView.setText(note.getTitle());
+        dateTextView.setText(note.getFormattedCreationTime());
 
 
 

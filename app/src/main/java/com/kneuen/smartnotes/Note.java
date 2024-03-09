@@ -3,6 +3,9 @@ package com.kneuen.smartnotes;
 import android.util.Log;
 
 import java.util.UUID;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 public class Note {
     private UUID id;
@@ -56,12 +59,16 @@ public class Note {
         this.content = content;
     }
 
-
     public long getCreationTime() {
         return creationTime;
     }
 
     public void setCreationTime(long creationTime) {
         this.creationTime = creationTime;
+    }
+
+    public String getFormattedCreationTime() {
+        SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy", Locale.getDefault());
+        return formatter.format(new Date(creationTime));
     }
 }

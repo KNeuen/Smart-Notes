@@ -13,5 +13,13 @@
         android:textStyle="bold"
         android:id="@+id/titleTextView"/>
 
+    <TextView
+        android:id="@+id/dateTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/titleTextView"
+        android:textSize="14sp"
+        android:layout_marginTop="4dp"/>
+
 
 </LinearLayout>
