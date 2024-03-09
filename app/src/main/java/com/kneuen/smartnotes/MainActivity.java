@@ -69,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
         for (int i = 0; i < noteCount; i++) {
             String title = sharedPreferences.getString("note_title_" + i, "");
             String content = sharedPreferences.getString("note_content_" + i, "");
-            String uuid = sharedPreferences.getString("note_uuid" + i, "");
+            String uuid = sharedPreferences.getString("note_uuid" + i, UUID.randomUUID().toString());
             Long creationTime = sharedPreferences.getLong("note_creation_time" + i, System.currentTimeMillis());
             boolean isPinned = sharedPreferences.getBoolean("note_pinned_" + i, false);
             Note note = new Note();
