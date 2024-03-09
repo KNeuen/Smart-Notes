@@ -4,8 +4,10 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -16,14 +18,13 @@ import java.util.Comparator;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class MainActivity extends AppCompatActivity {
-
-    private static final String PREFS_NAME = "NotePrefs";
-    private static final String KEY_NOTE_COUNT = "NoteCount";
+    static final String PREFS_NAME = "NotePrefs";
+    static final String KEY_NOTE_COUNT = "NoteCount";
     private LinearLayout notesContainer;
-    private List<Note> noteList;
-    private long creationTime;
+    static List<Note> noteList;
 
 
     @Override
@@ -47,6 +48,14 @@ public class MainActivity extends AppCompatActivity {
         displayNotes();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        // Make sure when Note list always updated
+        refreshNoteViews();
+    }
+
     private void displayNotes() {
         for (Note note : noteList) {
             createNoteView(note);
@@ -60,12 +69,17 @@ public class MainActivity extends AppCompatActivity {
         for (int i = 0; i < noteCount; i++) {
             String title = sharedPreferences.getString("note_title_" + i, "");
             String content = sharedPreferences.getString("note_content_" + i, "");
+            String uuid = sharedPreferences.getString("note_uuid" + i, "");
+            Long creationTime = sharedPreferences.getLong("note_creation_time" + i, System.currentTimeMillis());
             boolean isPinned = sharedPreferences.getBoolean("note_pinned_" + i, false);
             Note note = new Note();
 
             note.setTitle(title);
             note.setContent(content);
             note.setPinned(isPinned);
+            note.setId(UUID.fromString(uuid));
+            note.setCreationTime(creationTime);
+
             noteList.add(note);
 
         }
@@ -105,6 +119,7 @@ public class MainActivity extends AppCompatActivity {
         TextView titleTextView = noteView.findViewById(R.id.titleTextView);
         TextView contentTextView = noteView.findViewById(R.id.contentTextView);
 
+
         titleTextView.setText(note.getTitle());
         contentTextView.setText(note.getContent());
 
@@ -121,41 +136,52 @@ public class MainActivity extends AppCompatActivity {
         noteView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showEditDialog(note);
+//                showEditDialog(note);
+                goEditActivity(note);
             }
         });
 
         notesContainer.addView(noteView);
     }
 
-    private void showEditDialog(final Note note) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Edit Note");
+//    private void showEditDialog(final Note note) {
+//        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+//        builder.setTitle("Edit Note");
+//
+//        View dialogView = getLayoutInflater().inflate(R.layout.note_edit, null);
+//        final EditText editTitle = dialogView.findViewById(R.id.editTitle);
+//        final EditText editContent = dialogView.findViewById(R.id.editContent);
+//
+//        editTitle.setText(note.getTitle());
+//        editContent.setText(note.getContent());
+//
+//        builder.setView(dialogView)
+//                .setPositiveButton("Save", new DialogInterface.OnClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface dialog, int id) {
+//                        note.setTitle(editTitle.getText().toString());
+//                        note.setContent(editContent.getText().toString());
+//                        saveNotesToPreferences();
+//                        refreshNoteViews();
+//                    }
+//                })
+//                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+//                    public void onClick(DialogInterface dialog, int id) {
+//                        dialog.cancel();
+//                    }
+//                });
+//
+//        builder.create().show();
+//    }
 
-        View dialogView = getLayoutInflater().inflate(R.layout.note_edit, null);
-        final EditText editTitle = dialogView.findViewById(R.id.editTitle);
-        final EditText editContent = dialogView.findViewById(R.id.editContent);
+    private void goEditActivity(final Note note) {
+        UUID uuid = note.getId();
 
-        editTitle.setText(note.getTitle());
-        editContent.setText(note.getContent());
+        Intent intent = new Intent(getApplicationContext(), NoteEditingActivity.class);
+        intent.putExtra("UUID", uuid.toString());
 
-        builder.setView(dialogView)
-                .setPositiveButton("Save", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int id) {
-                        note.setTitle(editTitle.getText().toString());
-                        note.setContent(editContent.getText().toString());
-                        saveNotesToPreferences();
-                        refreshNoteViews();
-                    }
-                })
-                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        dialog.cancel();
-                    }
-                });
+        startActivity(intent);
 
-        builder.create().show();
     }
     private void showNoteOptionsDialog(final Note note) {
         String[] options = note.isPinned() ? new String[]{"Delete", "Unpin"} : new String[]{"Delete", "Pin"};
@@ -254,6 +280,8 @@ public class MainActivity extends AppCompatActivity {
             editor.putString("note_title_" + i, note.getTitle());
             editor.putString("note_content_" + i, note.getContent());
             editor.putBoolean("note_pinned_" + i, note.isPinned());
+            editor.putString("note_uuid" + i, note.getId().toString());
+            editor.putLong("note_creation_time" + i, note.getCreationTime());
         }
         editor.apply();
     }
