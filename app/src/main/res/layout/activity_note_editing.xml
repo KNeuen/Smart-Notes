@@ -7,9 +7,48 @@
     android:layout_height="match_parent"
     tools:context=".NoteEditingActivity">
 
+    <!-- Formatting Buttons -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
 
+        <!-- Bold Button -->
+        <Button
+            android:id="@+id/btn_bold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="B" />
 
+        <!-- Italic Button -->
+        <Button
+            android:id="@+id/btn_italic"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="I" />
 
+        <!-- Underline Button -->
+        <Button
+            android:id="@+id/btn_underline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="U" />
+
+        <!-- Bullet Button -->
+        <Button
+            android:id="@+id/btn_bullet"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="•" />
+
+        <!-- Highlight Button -->
+        <Button
+            android:id="@+id/btn_highlight"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="H" />
+
+    </LinearLayout>
 
     <EditText
         android:id="@+id/titleEdit"

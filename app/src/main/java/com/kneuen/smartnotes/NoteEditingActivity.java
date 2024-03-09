@@ -14,6 +14,13 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.widget.EditText;
 
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.style.StyleSpan;
+import android.graphics.Typeface;
+import android.view.View;
+import android.widget.Button;
+
 import java.util.UUID;
 
 public class NoteEditingActivity extends AppCompatActivity {
@@ -80,6 +87,14 @@ public class NoteEditingActivity extends AppCompatActivity {
             }
         });
 
+        // Initialize the bold button
+        Button boldButton = findViewById(R.id.btn_bold);
+        boldButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                applyBoldStyle();
+            }
+        });
 
     }
     private void saveNotesToPreferences() {
@@ -95,5 +110,18 @@ public class NoteEditingActivity extends AppCompatActivity {
             editor.putString("note_uuid" + i, note.getId().toString());
         }
         editor.apply();
+    }
+
+    private void applyBoldStyle() {
+        EditText editContent = findViewById(R.id.contentEdit);
+        int start = editContent.getSelectionStart();
+        int end = editContent.getSelectionEnd();
+
+        // Apply the bold style to the selected text
+        SpannableString spannableString = new SpannableString(editContent.getText());
+        spannableString.setSpan(new StyleSpan(Typeface.BOLD), start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+        editContent.setText(spannableString);
+        editContent.setSelection(start, end); // Keep the text selected
     }
 }
