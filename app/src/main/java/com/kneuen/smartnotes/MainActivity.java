@@ -117,11 +117,7 @@ public class MainActivity extends AppCompatActivity {
     private void createNoteView(final Note note) {
         View noteView = getLayoutInflater().inflate(R.layout.note_item, null);
         TextView titleTextView = noteView.findViewById(R.id.titleTextView);
-        TextView contentTextView = noteView.findViewById(R.id.contentTextView);
-
-
         titleTextView.setText(note.getTitle());
-        contentTextView.setText(note.getContent());
 
 
 
