@@ -155,7 +155,7 @@ public class MainActivity extends AppCompatActivity {
         builder.create().show();
     }
     private void showNoteOptionsDialog(final Note note) {
-        String[] options = {"Delete", "Pin"};
+        String[] options = note.isPinned() ? new String[]{"Delete", "Unpin"} : new String[]{"Delete", "Pin"};
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Note Options");
         builder.setItems(options, new DialogInterface.OnClickListener() {
@@ -163,8 +163,12 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(DialogInterface dialog, int which) {
                 if (which == 0) { // Delete option
                     showDeleteDialog(note);
-                } else if (which == 1) { // Pin option
-                    pinNote(note);
+                } else if (which == 1) { // Pin/Unpin option
+                    if (note.isPinned()) {
+                        unpinNote(note);
+                    } else {
+                        pinNote(note);
+                    }
                 }
             }
         });
@@ -173,6 +177,13 @@ public class MainActivity extends AppCompatActivity {
 
     private void pinNote(Note note) {
         note.setPinned(true);
+        reorderNotes();
+        saveNotesToPreferences();
+        refreshNoteViews();
+    }
+
+    private void unpinNote(Note note) {
+        note.setPinned(false);
         reorderNotes();
         saveNotesToPreferences();
         refreshNoteViews();
