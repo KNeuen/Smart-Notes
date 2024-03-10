@@ -37,6 +37,13 @@
         android:text="@string/save_notes"
         android:layout_marginTop="16dp"/>
 
+    <Button
+        android:id="@+id/newNoteButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/new_note"
+        android:layout_marginTop="16dp"/>
+
     <TextView
         android:layout_width="match_parent"
         android:layout_height="18dp"

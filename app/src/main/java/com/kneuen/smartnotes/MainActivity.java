@@ -11,7 +11,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -53,9 +52,20 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        Button newNoteButton = findViewById(R.id.newNoteButton);
+
+        newNoteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                addNote();
+            }
+        });
+
         loadNotesFromPreferences();
         displayNotes();
     }
+
+
 
     @Override
     protected void onResume() {
@@ -132,8 +142,6 @@ public class MainActivity extends AppCompatActivity {
         titleTextView.setText(note.getTitle());
         dateTextView.setText(note.getFormattedCreationTime());
 
-
-
         noteView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
@@ -153,35 +161,30 @@ public class MainActivity extends AppCompatActivity {
         notesContainer.addView(noteView);
     }
 
-//    private void showEditDialog(final Note note) {
-//        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-//        builder.setTitle("Edit Note");
-//
-//        View dialogView = getLayoutInflater().inflate(R.layout.note_edit, null);
-//        final EditText editTitle = dialogView.findViewById(R.id.editTitle);
-//        final EditText editContent = dialogView.findViewById(R.id.editContent);
-//
-//        editTitle.setText(note.getTitle());
-//        editContent.setText(note.getContent());
-//
-//        builder.setView(dialogView)
-//                .setPositiveButton("Save", new DialogInterface.OnClickListener() {
-//                    @Override
-//                    public void onClick(DialogInterface dialog, int id) {
-//                        note.setTitle(editTitle.getText().toString());
-//                        note.setContent(editContent.getText().toString());
-//                        saveNotesToPreferences();
-//                        refreshNoteViews();
-//                    }
-//                })
-//                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-//                    public void onClick(DialogInterface dialog, int id) {
-//                        dialog.cancel();
-//                    }
-//                });
-//
-//        builder.create().show();
-//    }
+    private void addNote() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("New Note");
+
+        View dialogView = getLayoutInflater().inflate(R.layout.new_note, null);
+        final EditText editTitle = dialogView.findViewById(R.id.editTitle);
+
+        // New Note Object
+        Note note = new Note();
+
+        builder.setView(dialogView)
+                .setPositiveButton("Save", (dialog, id) -> {
+                    note.setTitle(editTitle.getText().toString());
+                    note.setContent("");
+                    note.setCreationTime(System.currentTimeMillis());
+
+                    noteList.add(note);
+                    saveNotesToPreferences();
+                    goEditActivity(note);
+                })
+                .setNegativeButton("Cancel", (dialog, id) -> dialog.cancel());
+
+        builder.create().show();
+    }
 
     private void goEditActivity(final Note note) {
         UUID uuid = note.getId();
