@@ -10,6 +10,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.Html;
+import android.text.Spanned;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.widget.EditText;
@@ -115,6 +117,12 @@ public class NoteEditingActivity extends AppCompatActivity {
                 editText.getSelectionStart(),
                 editText.getSelectionEnd(),
                 0);
+
+//        String htmlString = Html.toHtml(spannableString);
+//        Log.d("html", htmlString);
+//
+//        String testing = "testtest";
+//        Spanned test = Html.fromHtml(htmlString);
 
         editText.setText(spannableString);
     }

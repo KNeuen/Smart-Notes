@@ -13,7 +13,7 @@
         android:layout_width="match_parent"
         android:background="@drawable/edittext_bg"
         android:layout_height="46dp"
-        android:paddingLeft="10dp"
+        android:paddingStart="10dp"
         android:textColor="@color/black"
         android:hint="Note Title"/>
 
@@ -34,13 +34,13 @@
         android:id="@+id/saveButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Save Notes"
+        android:text="@string/save_notes"
         android:layout_marginTop="16dp"/>
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="18dp"
-        android:text="Notes:"
+        android:text="@string/notes"
         android:layout_marginTop="16dp"
         android:textStyle="bold"
         android:id="@+id/notesTextView"/>

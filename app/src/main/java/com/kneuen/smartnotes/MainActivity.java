@@ -1,7 +1,11 @@
 package com.kneuen.smartnotes;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.biometric.BiometricManager;
+import androidx.biometric.BiometricPrompt;
+import androidx.core.content.ContextCompat;
 
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -13,12 +17,15 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import java.util.Collections;
 import java.util.Comparator;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.Executor;
 
 public class MainActivity extends AppCompatActivity {
     static final String PREFS_NAME = "NotePrefs";
@@ -31,6 +38,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        AuthenticationCall();
 
         notesContainer = findViewById(R.id.notesContainer);
         Button saveButton = findViewById(R.id.saveButton);
@@ -284,6 +293,73 @@ public class MainActivity extends AppCompatActivity {
             editor.putLong("note_creation_time" + i, note.getCreationTime());
         }
         editor.apply();
+    }
+
+    private void AuthenticationCall() {
+
+        int allowedAuthenticators = BiometricManager.Authenticators.BIOMETRIC_WEAK |
+                BiometricManager.Authenticators.DEVICE_CREDENTIAL;
+
+        // Methods to notify user in case of these scenarios Optional
+        BiometricManager biometricManager = BiometricManager.from(this);
+        switch (biometricManager.canAuthenticate(allowedAuthenticators)) {
+            case BiometricManager.BIOMETRIC_ERROR_NONE_ENROLLED:
+//                notifyUser("No Biometric Assigned");
+                break;
+
+            case BiometricManager.BIOMETRIC_ERROR_HW_UNAVAILABLE:
+            case BiometricManager.BIOMETRIC_ERROR_NO_HARDWARE:
+            case BiometricManager.BIOMETRIC_ERROR_SECURITY_UPDATE_REQUIRED:
+            case BiometricManager.BIOMETRIC_ERROR_UNSUPPORTED:
+            case BiometricManager.BIOMETRIC_STATUS_UNKNOWN:
+            case BiometricManager.BIOMETRIC_SUCCESS:
+                break;
+        }
+
+
+
+
+        // Authentication Protocols
+        BiometricPrompt.PromptInfo promptInfo = new BiometricPrompt.PromptInfo.Builder()
+                .setTitle("Please Verify")
+                .setDescription("User Authentication Required")
+                .setAllowedAuthenticators(allowedAuthenticators)
+                .build();
+
+        getPrompt().authenticate(promptInfo);
+    }
+
+    // Function calling to verify identity
+    private BiometricPrompt getPrompt() {
+        Executor executor = ContextCompat.getMainExecutor(this);
+        BiometricPrompt.AuthenticationCallback callback = new BiometricPrompt.AuthenticationCallback() {
+            @Override
+            public void onAuthenticationError(int errorCode, @NonNull CharSequence errString) {
+                super.onAuthenticationError(errorCode, errString);
+                notifyUser(errString.toString());
+            }
+
+            @Override
+            public void onAuthenticationSucceeded(@NonNull BiometricPrompt.AuthenticationResult result) {
+                super.onAuthenticationSucceeded(result);
+
+                // Action to accomplish
+                notifyUser("Authentication Succeeded");
+            }
+
+            @Override
+            public void onAuthenticationFailed() {
+                super.onAuthenticationFailed();
+                notifyUser("Authentication Failed");
+            }
+        };
+
+        return new BiometricPrompt(this, executor, callback);
+    }
+
+    // Toast to notify User
+    private void notifyUser(String message) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 
 }
