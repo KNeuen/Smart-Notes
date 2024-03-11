@@ -17,6 +17,8 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.text.Html;
+import android.text.Spanned;
 
 import java.util.Collections;
 import java.util.Comparator;
@@ -87,14 +89,15 @@ public class MainActivity extends AppCompatActivity {
 
         for (int i = 0; i < noteCount; i++) {
             String title = sharedPreferences.getString("note_title_" + i, "");
-            String content = sharedPreferences.getString("note_content_" + i, "");
+            String htmlContent = sharedPreferences.getString("note_content_" + i, "");
+            Spanned content = Html.fromHtml(htmlContent);
             String uuid = sharedPreferences.getString("note_uuid" + i, UUID.randomUUID().toString());
             Long creationTime = sharedPreferences.getLong("note_creation_time" + i, System.currentTimeMillis());
             boolean isPinned = sharedPreferences.getBoolean("note_pinned_" + i, false);
             Note note = new Note();
 
             note.setTitle(title);
-            note.setContent(content);
+            note.setContent(htmlContent);
             note.setPinned(isPinned);
             note.setId(UUID.fromString(uuid));
             note.setCreationTime(creationTime);
