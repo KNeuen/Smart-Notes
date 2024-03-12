@@ -14,10 +14,16 @@
         android:autofillHints="Title" />
     
     <Button
-        android:id="@+id/setReminderButton"
+        android:id="@+id/setDateButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Set Reminder" />
+        android:text="Set Date"/>
+
+    <Button
+        android:id="@+id/setTimeButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Set Time"/>
 
     <DatePicker
         android:id="@+id/datePicker"

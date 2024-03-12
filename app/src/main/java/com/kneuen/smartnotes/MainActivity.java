@@ -325,15 +325,33 @@ public class MainActivity extends AppCompatActivity {
         View dialogView = getLayoutInflater().inflate(R.layout.new_note, null);
         final EditText editTitle = dialogView.findViewById(R.id.editTitle);
 
-        final Button setReminderButton = dialogView.findViewById(R.id.setReminderButton);
+        final Button setDateButton = dialogView.findViewById(R.id.setDateButton);
+        final Button setTimeButton = dialogView.findViewById(R.id.setTimeButton);
         final DatePicker datePicker = dialogView.findViewById(R.id.datePicker);
         final TimePicker timePicker = dialogView.findViewById(R.id.timePicker);
 
-        setReminderButton.setOnClickListener(new View.OnClickListener() {
+        setDateButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                datePicker.setVisibility(View.VISIBLE);
-                timePicker.setVisibility(View.VISIBLE);
+                // Toggle DatePicker visibility
+                if (datePicker.getVisibility() == View.GONE) {
+                    datePicker.setVisibility(View.VISIBLE);
+                } else {
+                    datePicker.setVisibility(View.GONE);
+                }
+            }
+        });
+
+        setTimeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Toggle TimePicker visibility
+                if (timePicker.getVisibility() == View.GONE) {
+                    timePicker.setVisibility(View.VISIBLE);
+                    timePicker.setVisibility(View.VISIBLE);
+                } else {
+                    timePicker.setVisibility(View.GONE);
+                }
             }
         });
 
@@ -345,17 +363,20 @@ public class MainActivity extends AppCompatActivity {
                     note.setTitle(editTitle.getText().toString());
                     note.setContent("");
 
-                    // Get the date and time from the picker
                     if (datePicker.getVisibility() == View.VISIBLE) {
-                        // Get the date and time from the picker
+                        // Get the date from the DatePicker
                         Calendar calendar = Calendar.getInstance();
                         calendar.set(Calendar.YEAR, datePicker.getYear());
                         calendar.set(Calendar.MONTH, datePicker.getMonth());
                         calendar.set(Calendar.DAY_OF_MONTH, datePicker.getDayOfMonth());
-                        calendar.set(Calendar.HOUR_OF_DAY, timePicker.getCurrentHour());
-                        calendar.set(Calendar.MINUTE, timePicker.getCurrentMinute());
 
-                        // Set the date and time to your note
+                        // If time has been set, use it; otherwise, default to current time.
+                        if (timePicker.getVisibility() == View.VISIBLE) {
+                            calendar.set(Calendar.HOUR_OF_DAY, timePicker.getCurrentHour());
+                            calendar.set(Calendar.MINUTE, timePicker.getCurrentMinute());
+                        }
+
+                        // Set the calendar time as the reminder date for the note
                         note.setReminderDate(calendar.getTimeInMillis());
                     }
 
