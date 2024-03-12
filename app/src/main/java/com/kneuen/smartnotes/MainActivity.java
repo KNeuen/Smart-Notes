@@ -26,6 +26,10 @@ import android.text.Html;
 import android.text.Spanned;
 import android.graphics.Color;
 
+import android.widget.DatePicker;
+import android.widget.TimePicker;
+import java.util.Calendar;
+
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -321,6 +325,18 @@ public class MainActivity extends AppCompatActivity {
         View dialogView = getLayoutInflater().inflate(R.layout.new_note, null);
         final EditText editTitle = dialogView.findViewById(R.id.editTitle);
 
+        final Button setReminderButton = dialogView.findViewById(R.id.setReminderButton);
+        final DatePicker datePicker = dialogView.findViewById(R.id.datePicker);
+        final TimePicker timePicker = dialogView.findViewById(R.id.timePicker);
+
+        setReminderButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                datePicker.setVisibility(View.VISIBLE);
+                timePicker.setVisibility(View.VISIBLE);
+            }
+        });
+
         // New Note Object
         Note note = new Note();
 
@@ -328,7 +344,20 @@ public class MainActivity extends AppCompatActivity {
                 .setPositiveButton("Save", (dialog, id) -> {
                     note.setTitle(editTitle.getText().toString());
                     note.setContent("");
-                    note.setCreationTime(System.currentTimeMillis());
+
+                    // Get the date and time from the picker
+                    if (datePicker.getVisibility() == View.VISIBLE) {
+                        // Get the date and time from the picker
+                        Calendar calendar = Calendar.getInstance();
+                        calendar.set(Calendar.YEAR, datePicker.getYear());
+                        calendar.set(Calendar.MONTH, datePicker.getMonth());
+                        calendar.set(Calendar.DAY_OF_MONTH, datePicker.getDayOfMonth());
+                        calendar.set(Calendar.HOUR_OF_DAY, timePicker.getCurrentHour());
+                        calendar.set(Calendar.MINUTE, timePicker.getCurrentMinute());
+
+                        // Set the date and time to your note
+                        note.setReminderDate(calendar.getTimeInMillis());
+                    }
 
                     noteList.add(note);
                     saveToPreferences();

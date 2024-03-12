@@ -17,6 +17,8 @@ public class Note {
     private long creationTime;
     private String tag;
 
+    private long reminderDate;
+
     public Note() {
         this.id = UUID.randomUUID();
         this.tag = null;
@@ -85,4 +87,14 @@ public class Note {
     public String getTag() {
         return this.tag;
     }
+
+
+    public long getReminderDate() {
+        return reminderDate;
+    }
+
+    public void setReminderDate(long reminderDate) {
+        this.reminderDate = reminderDate;
+    }
+
 }
