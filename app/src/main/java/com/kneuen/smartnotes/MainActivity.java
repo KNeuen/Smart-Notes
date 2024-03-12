@@ -27,7 +27,7 @@ import android.text.Spanned;
 import android.graphics.Color;
 
 import android.widget.DatePicker;
-import android.widget.TimePicker;
+//import android.widget.TimePicker;
 import java.util.Calendar;
 import android.provider.CalendarContract;
 import android.provider.AlarmClock;
@@ -329,9 +329,9 @@ public class MainActivity extends AppCompatActivity {
         final EditText editTitle = dialogView.findViewById(R.id.editTitle);
 
         final Button setDateButton = dialogView.findViewById(R.id.setDateButton);
-        final Button setTimeButton = dialogView.findViewById(R.id.setTimeButton);
+        //final Button setTimeButton = dialogView.findViewById(R.id.setTimeButton);
         final DatePicker datePicker = dialogView.findViewById(R.id.datePicker);
-        final TimePicker timePicker = dialogView.findViewById(R.id.timePicker);
+        //final TimePicker timePicker = dialogView.findViewById(R.id.timePicker);
 
         setDateButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -345,25 +345,24 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        setTimeButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        //setTimeButton.setOnClickListener(new View.OnClickListener() {
+            //@Override
+            //public void onClick(View v) {
                 // Toggle TimePicker visibility
-                if (timePicker.getVisibility() == View.GONE) {
-                    timePicker.setVisibility(View.VISIBLE);
-                    timePicker.setVisibility(View.VISIBLE);
-                } else {
-                    timePicker.setVisibility(View.GONE);
-                }
-            }
-        });
+                //if (timePicker.getVisibility() == View.GONE) {
+                    //timePicker.setVisibility(View.VISIBLE);
+                    //timePicker.setVisibility(View.VISIBLE);
+                //} else {
+                    //timePicker.setVisibility(View.GONE);
+                //}
+            //}
+        //});
 
         // New Note Object
         Note note = new Note();
 
-        // Set the creation time to current time by default
+// Set the creation time to current time by default
         note.setCreationTime(System.currentTimeMillis());
-
 
         builder.setView(dialogView)
                 .setPositiveButton("Save", (dialog, id) -> {
@@ -377,14 +376,37 @@ public class MainActivity extends AppCompatActivity {
                         calendar.set(Calendar.MONTH, datePicker.getMonth());
                         calendar.set(Calendar.DAY_OF_MONTH, datePicker.getDayOfMonth());
 
-                        if (timePicker.getVisibility() == View.VISIBLE) {
-                            calendar.set(Calendar.HOUR_OF_DAY, timePicker.getCurrentHour());
-                            calendar.set(Calendar.MINUTE, timePicker.getCurrentMinute());
-                        }
+                        //if (timePicker.getVisibility() == View.VISIBLE) {
+                            //calendar.set(Calendar.HOUR_OF_DAY, timePicker.getCurrentHour());
+                            //calendar.set(Calendar.MINUTE, timePicker.getCurrentMinute());
+                        //}
 
                         // Override the creation time with the selected date and time
                         note.setCreationTime(calendar.getTimeInMillis());
                     }
+
+                    //boolean dateSet = datePicker.getVisibility() == View.VISIBLE;
+                    //boolean timeSet = timePicker.getVisibility() == View.VISIBLE;
+
+                    //if (dateSet) {
+                        // Update the calendar with the selected date
+                    //    calendar.set(Calendar.YEAR, datePicker.getYear());
+                    //    calendar.set(Calendar.MONTH, datePicker.getMonth());
+                    //    calendar.set(Calendar.DAY_OF_MONTH, datePicker.getDayOfMonth());
+                    //}
+
+                    //if (timeSet) {
+                        // Update the calendar with the selected time
+                        //calendar.set(Calendar.HOUR_OF_DAY, timePicker.getCurrentHour());
+                        //calendar.set(Calendar.MINUTE, timePicker.getCurrentMinute());
+                    //} else if (dateSet) {
+                        // If date is set but time is not, reset time to midnight
+                        //calendar.set(Calendar.HOUR_OF_DAY, 0);
+                        //calendar.set(Calendar.MINUTE, 0);
+                    //}
+
+                    // Set the note's creation time
+                    //note.setCreationTime(calendar.getTimeInMillis());
 
                     noteList.add(note);
                     saveToPreferences();
