@@ -546,7 +546,7 @@ public class MainActivity extends AppCompatActivity {
             case "yellow":
                 return Color.parseColor("#FFF9C4"); // Light Yellow
             case "green":
-                return Color.parseColor("#C8E6C9"); // Light Green, similar to the uploaded image
+                return Color.parseColor("#C8E6C9"); // Light Green
             case "blue":
                 return Color.parseColor("#BBDEFB"); // Light Blue
             case "indigo":
