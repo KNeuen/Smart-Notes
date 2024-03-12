@@ -29,6 +29,9 @@ import android.graphics.Color;
 import android.widget.DatePicker;
 import android.widget.TimePicker;
 import java.util.Calendar;
+import android.provider.CalendarContract;
+import android.provider.AlarmClock;
+
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -358,26 +361,29 @@ public class MainActivity extends AppCompatActivity {
         // New Note Object
         Note note = new Note();
 
+        // Set the creation time to current time by default
+        note.setCreationTime(System.currentTimeMillis());
+
+
         builder.setView(dialogView)
                 .setPositiveButton("Save", (dialog, id) -> {
                     note.setTitle(editTitle.getText().toString());
                     note.setContent("");
 
                     if (datePicker.getVisibility() == View.VISIBLE) {
-                        // Get the date from the DatePicker
+                        // Get the date and time from the DatePicker and TimePicker
                         Calendar calendar = Calendar.getInstance();
                         calendar.set(Calendar.YEAR, datePicker.getYear());
                         calendar.set(Calendar.MONTH, datePicker.getMonth());
                         calendar.set(Calendar.DAY_OF_MONTH, datePicker.getDayOfMonth());
 
-                        // If time has been set, use it; otherwise, default to current time.
                         if (timePicker.getVisibility() == View.VISIBLE) {
                             calendar.set(Calendar.HOUR_OF_DAY, timePicker.getCurrentHour());
                             calendar.set(Calendar.MINUTE, timePicker.getCurrentMinute());
                         }
 
-                        // Set the calendar time as the reminder date for the note
-                        note.setReminderDate(calendar.getTimeInMillis());
+                        // Override the creation time with the selected date and time
+                        note.setCreationTime(calendar.getTimeInMillis());
                     }
 
                     noteList.add(note);
@@ -605,6 +611,39 @@ public class MainActivity extends AppCompatActivity {
                 return Color.parseColor("#E1BEE7"); // Light Violet
             default:
                 return Color.TRANSPARENT; // Default color if none matched
+        }
+    }
+
+    private void addEventToCalendar(Note note) {
+        Calendar beginTime = Calendar.getInstance();
+        beginTime.setTimeInMillis(note.getReminderDate());
+
+        Intent intent = new Intent(Intent.ACTION_INSERT)
+                .setData(CalendarContract.Events.CONTENT_URI)
+                .putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME, beginTime.getTimeInMillis())
+                .putExtra(CalendarContract.Events.TITLE, note.getTitle())
+                .putExtra(CalendarContract.Events.DESCRIPTION, note.getContent());
+
+        if (intent.resolveActivity(getPackageManager()) != null) {
+            startActivity(intent);
+        } else {
+            // Handle the case where the calendar app is not available.
+        }
+    }
+
+    private void setAlarm(Note note) {
+        Calendar alarmTime = Calendar.getInstance();
+        alarmTime.setTimeInMillis(note.getReminderDate());
+
+        Intent intent = new Intent(AlarmClock.ACTION_SET_ALARM)
+                .putExtra(AlarmClock.EXTRA_HOUR, alarmTime.get(Calendar.HOUR_OF_DAY))
+                .putExtra(AlarmClock.EXTRA_MINUTES, alarmTime.get(Calendar.MINUTE))
+                .putExtra(AlarmClock.EXTRA_MESSAGE, note.getTitle());
+
+        if (intent.resolveActivity(getPackageManager()) != null) {
+            startActivity(intent);
+        } else {
+            // Handle the case where the alarm app is not available.
         }
     }
 
