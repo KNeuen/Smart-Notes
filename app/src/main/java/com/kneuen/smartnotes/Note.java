@@ -15,9 +15,11 @@ public class Note {
     private boolean isPinned;
 
     private long creationTime;
+    private String tag;
 
     public Note() {
         this.id = UUID.randomUUID();
+        this.tag = null;
     }
     public String getTitle() {
         return title;
@@ -57,6 +59,7 @@ public class Note {
         this.id = id;
         this.title = title;
         this.content = content;
+        this.tag = null;
     }
 
     public long getCreationTime() {
@@ -70,5 +73,16 @@ public class Note {
     public String getFormattedCreationTime() {
         SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy", Locale.getDefault());
         return formatter.format(new Date(creationTime));
+    }
+
+    public void setTag(String tag) {
+        this.tag = tag;
+    }
+    public void deleteTag() {
+        this.tag = null;
+    }
+
+    public String getTag() {
+        return this.tag;
     }
 }

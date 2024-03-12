@@ -8,41 +8,42 @@
     android:padding="16dp"
     tools:context=".MainActivity">
 
-    <EditText
-        android:id="@+id/titleEditText"
-        android:layout_width="match_parent"
-        android:background="@drawable/edittext_bg"
-        android:layout_height="46dp"
-        android:paddingStart="10dp"
-        android:textColor="@color/black"
-        android:hint="Note Title"/>
-
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Note Content"
-        android:layout_marginTop="16dp"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp"
-        android:background="@drawable/edittext_bg"
-        android:textColor="@color/black"
-        android:inputType="textMultiLine"
-        android:minLines="5"
-        android:id="@+id/contentEditText"/>
-
-    <Button
-        android:id="@+id/saveButton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/save_notes"
-        android:layout_marginTop="16dp"/>
-
     <Button
         android:id="@+id/newNoteButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/new_note"
         android:layout_marginTop="16dp"/>
+
+    <Button
+        android:id="@+id/newTagButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/new_tag"
+        android:layout_marginTop="16dp"/>
+
+    <Button
+        android:id="@+id/deleteTagButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/delete_tag"
+        android:layout_marginTop="16dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="8dp"
+        android:textStyle="bold"
+        android:text="@string/tag_view"/>
+
+
+    <Spinner
+        android:id="@+id/tagSpinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:drawable/btn_dropdown"
+        android:spinnerMode="dropdown"/>
+
 
     <TextView
         android:layout_width="match_parent"

@@ -4,4 +4,7 @@
     <string name="save_notes">Save Notes</string>
     <string name="new_note">New Note</string>
     <string name="title">Title</string>
+    <string name="new_tag">New Tag</string>
+    <string name="tag_view">Tag View</string>
+    <string name="delete_tag">Delete Tag</string>
 </resources>
