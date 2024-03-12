@@ -12,6 +12,7 @@ public class Tag {
 
     private String name;
 
+    private String color; // Hexadecimal color code as a string.
     private List<Note> noteIdList;
 
     public Tag() {
@@ -55,6 +56,14 @@ public class Tag {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public String getColor() {
+        return color;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
     }
 
 

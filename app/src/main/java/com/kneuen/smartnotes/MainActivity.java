@@ -24,6 +24,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.text.Html;
 import android.text.Spanned;
+import android.graphics.Color;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -123,8 +124,14 @@ public class MainActivity extends AppCompatActivity {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("New Tag");
 
-        View dialogView = getLayoutInflater().inflate(R.layout.new_note, null);
+        View dialogView = getLayoutInflater().inflate(R.layout.new_tag, null);
         final EditText editTitle = dialogView.findViewById(R.id.editTitle);
+
+        // Dropdown for color selection
+        Spinner colorSpinner = dialogView.findViewById(R.id.colorSpinner);
+        String[] colors = {"Red", "Orange", "Yellow", "Green", "Blue", "Indigo", "Violet"};
+        ArrayAdapter<String> colorAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, colors);
+        colorSpinner.setAdapter(colorAdapter);
 
         // New Note Object
         Tag tag = new Tag();
@@ -132,6 +139,7 @@ public class MainActivity extends AppCompatActivity {
         builder.setView(dialogView)
                 .setPositiveButton("Save", (dialog, id) -> {
                     String name = editTitle.getText().toString();
+                    String selectedColor = colorSpinner.getSelectedItem().toString();
                     int allowed = 1;
                     for (Tag curtag : tagList) {
                         if (Objects.equals(curtag.getName(), name) || name.equals("All Notes")) {
@@ -141,6 +149,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                     if (allowed == 1) {
                         tag.setName(name);
+                        tag.setColor(selectedColor); // Set the color of the tag
                         tagList.add(tag);
                         setTagSpinner();
                     }
@@ -251,6 +260,7 @@ public class MainActivity extends AppCompatActivity {
             String id = sharedPreferences.getString("tag_id" + i, "");
             String name = sharedPreferences.getString("tag_name" + i, "");
             Log.d("why", name);
+            String color = sharedPreferences.getString("tag_color" + i, ""); //Retrieve Color
 
             String json_list = sharedPreferences.getString("tag_note_list" + i, "");
             ArrayList<Note> noteList = gson.fromJson(json_list, type);
@@ -258,6 +268,7 @@ public class MainActivity extends AppCompatActivity {
             Tag tag = new Tag();
             tag.setId(id);
             tag.setName(name);
+            tag.setColor(color); // Set the color
             tag.setNoteIdList(noteList);
 
             tagList.add(tag);
@@ -280,6 +291,7 @@ public class MainActivity extends AppCompatActivity {
             if (Objects.equals(tag.getId(), note.getTag())) {
                 String tagString = "Tag: " + tag.getName();
                 tagView.setText(tagString);
+                tagView.setBackgroundColor(getColorCode(tag.getColor())); // Set the background color
             }
         }
 
@@ -518,11 +530,34 @@ public class MainActivity extends AppCompatActivity {
             Tag tag = tagList.get(i);
             editor.putString("tag_id" + i, tag.getId());
             editor.putString("tag_name" + i, tag.getName());
+            editor.putString("tag_color" + i, tag.getColor()); // Save the color
             editor.putString("tag_note_list" + i, gson.toJson(tag.getNoteIdList()));
 
         }
         editor.apply();
     }
+
+    private int getColorCode(String colorName) {
+        switch (colorName.toLowerCase()) {
+            case "red":
+                return Color.parseColor("#FFCDD2"); // Light Red
+            case "orange":
+                return Color.parseColor("#FFE0B2"); // Light Orange
+            case "yellow":
+                return Color.parseColor("#FFF9C4"); // Light Yellow
+            case "green":
+                return Color.parseColor("#C8E6C9"); // Light Green, similar to the uploaded image
+            case "blue":
+                return Color.parseColor("#BBDEFB"); // Light Blue
+            case "indigo":
+                return Color.parseColor("#C5CAE9"); // Light Indigo
+            case "violet":
+                return Color.parseColor("#E1BEE7"); // Light Violet
+            default:
+                return Color.TRANSPARENT; // Default color if none matched
+        }
+    }
+
 
 
 
