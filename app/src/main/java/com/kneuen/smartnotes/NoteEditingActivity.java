@@ -4,32 +4,39 @@ import static com.kneuen.smartnotes.MainActivity.KEY_NOTE_COUNT;
 import static com.kneuen.smartnotes.MainActivity.PREFS_NAME;
 import static com.kneuen.smartnotes.MainActivity.noteList;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.Html;
+import android.text.SpannableString;
 import android.text.Spanned;
+import android.text.TextPaint;
 import android.text.TextWatcher;
+import android.text.style.ClickableSpan;
 import android.util.Log;
+import android.util.Patterns;
+import android.view.KeyEvent;
 import android.widget.EditText;
 
 import android.graphics.Typeface;
-import android.os.Bundle;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.style.StyleSpan;
 import android.text.style.UnderlineSpan;
 import android.view.View;
-import android.widget.EditText;
 
-import java.util.UUID;
+import java.util.regex.Matcher;
 
 public class NoteEditingActivity extends AppCompatActivity {
     Note note;
-    private EditText editText;
+    private EditText editContent;
+
 
 
     @Override
@@ -50,18 +57,16 @@ public class NoteEditingActivity extends AppCompatActivity {
 
         // Getting variables to edit
         EditText editTitle = findViewById(R.id.titleEdit);
-        EditText editContent = findViewById(R.id.contentEdit);
+        editContent = findViewById(R.id.contentEdit);
 
         editTitle.setText(note.getTitle());
-        editContent.setText(note.getContent());
 
-        editText = editContent;
+
 
         // Convert the saved HTML content back to a Spanned object for display
-        Spanned formattedContent = Html.fromHtml(note.getContent());
-        editContent.setText(formattedContent);
+        Spanned formattedContent = Html.fromHtml(note.getContent(), Html.FROM_HTML_MODE_COMPACT);
+        refreshContentText(createLinks(formattedContent));
 
-        editText = editContent;
 
 
 
@@ -91,7 +96,8 @@ public class NoteEditingActivity extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                note.setContent(String.valueOf(s));
+                Spanned spannableString = new SpannableStringBuilder(s);
+                note.setContent((Html.toHtml(spannableString, Html.TO_HTML_PARAGRAPH_LINES_INDIVIDUAL)));
                 saveNotesToPreferences();
 
             }
@@ -102,11 +108,78 @@ public class NoteEditingActivity extends AppCompatActivity {
             }
         });
 
+        // In the event the enter or space key is pressed
+        editContent.setOnKeyListener((v, actionId, event) -> {
+            if (actionId == KeyEvent.KEYCODE_SPACE || actionId == KeyEvent.KEYCODE_ENTER) {
+                refreshContentText(createLinks(editContent.getText()));
+            }
+            return false;
+        });
+
+    }
+
+    // Used to check for links and refresh the content
+    private void refreshContentText(Spanned spannableString) {
+
+        int cursorPosition = editContent.getSelectionStart();
+        editContent.setText(spannableString);
+        editContent.setSelection(cursorPosition);
+    }
+
+    private Spanned createLinks(Spanned spannedString) {
+        try {
+            Matcher matcher = Patterns.WEB_URL.matcher(spannedString);
+            SpannableStringBuilder editedSpanned = new SpannableStringBuilder(spannedString);
+
+            int matchStart, matchEnd;
+
+            while (matcher.find()) {
+                matchStart = matcher.start(1);
+                matchEnd = matcher.end();
+
+                String url = spannedString.subSequence(matchStart, matchEnd).toString();
+                if (!url.startsWith("http://") && !url.startsWith("https://")) {
+                    url = "https://" + url;
+
+                }
+                ClickableSpan clickableSpan = getClickableSpan(url);
+                editedSpanned.setSpan(clickableSpan, matchStart, matchEnd, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+            }
+
+
+            spannedString = editedSpanned;
+        } catch (Exception ignored){
+
+        }
+
+
+        return spannedString;
+    }
+
+    @NonNull
+    private ClickableSpan getClickableSpan(String url) {
+        return new ClickableSpan() {
+            @Override
+            public void onClick(@NonNull View view) {
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                startActivity(intent);
+
+            }
+
+            @Override
+            public void updateDrawState(@NonNull TextPaint ds) {
+                super.updateDrawState(ds);
+                ds.setColor(Color.BLUE);
+            }
+        };
     }
 
     private void saveNotesToPreferences() {
         SharedPreferences sharedPreferences = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
+
+        Log.d("Saved", note.getContent());
 
         editor.putInt(KEY_NOTE_COUNT, noteList.size());
         for (int i = 0; i < noteList.size(); i++) {
@@ -120,53 +193,52 @@ public class NoteEditingActivity extends AppCompatActivity {
     }
 
     public void buttonBold(View view) {
-        Spannable spannableString = new SpannableStringBuilder(editText.getText());
+        Spannable spannableString = new SpannableStringBuilder(editContent.getText());
         spannableString.setSpan(new StyleSpan(Typeface.BOLD),
-                editText.getSelectionStart(),
-                editText.getSelectionEnd(),
+                editContent.getSelectionStart(),
+                editContent.getSelectionEnd(),
                 Spannable.SPAN_INCLUSIVE_INCLUSIVE);
 
-        editText.setText(spannableString);
-        note.setContent(Html.toHtml(spannableString));
+//        editContent.setText(spannableString);
+        note.setContent(Html.toHtml(spannableString, Html.TO_HTML_PARAGRAPH_LINES_INDIVIDUAL));
+
         saveNotesToPreferences();
 
+        refreshContentText(spannableString);
 
-//        String htmlString = Html.toHtml(spannableString);
-//        Log.d("html", htmlString);
-//
-//        String testing = "testtest";
-//        Spanned test = Html.fromHtml(htmlString);
 
-///        editText.setText(spannableString)
+
         }
     public void buttonItalics(View view){
-        Spannable spannableString = new SpannableStringBuilder(editText.getText());
+        Spannable spannableString = new SpannableStringBuilder(editContent.getText());
         spannableString.setSpan(new StyleSpan(Typeface.ITALIC),
-                editText.getSelectionStart(),
-                editText.getSelectionEnd(),
+                editContent.getSelectionStart(),
+                editContent.getSelectionEnd(),
                 Spannable.SPAN_INCLUSIVE_INCLUSIVE);
 
-        editText.setText(spannableString);
-        note.setContent(Html.toHtml(spannableString));
+        note.setContent(Html.toHtml(spannableString, Html.TO_HTML_PARAGRAPH_LINES_INDIVIDUAL));
         saveNotesToPreferences();
+
+        refreshContentText(spannableString);
 
     }
     public void buttonUnderline(View view){
-        Spannable spannableString = new SpannableStringBuilder(editText.getText());
+        Spannable spannableString = new SpannableStringBuilder(editContent.getText());
         spannableString.setSpan(new UnderlineSpan(),
-                editText.getSelectionStart(),
-                editText.getSelectionEnd(),
+                editContent.getSelectionStart(),
+                editContent.getSelectionEnd(),
                 Spannable.SPAN_INCLUSIVE_INCLUSIVE);
 
-        editText.setText(spannableString);
-        note.setContent(Html.toHtml(spannableString));
+        note.setContent(Html.toHtml(spannableString, Html.TO_HTML_PARAGRAPH_LINES_INDIVIDUAL));
         saveNotesToPreferences();
+
+        refreshContentText(spannableString);
     }
 
     public void buttonNoFormat(View view){
-        int start = editText.getSelectionStart();
-        int end = editText.getSelectionEnd();
-        Editable editable = editText.getText();
+        int start = editContent.getSelectionStart();
+        int end = editContent.getSelectionEnd();
+        Editable editable = editContent.getText();
 
         // Remove all spans within the selected range
         StyleSpan[] styleSpans = editable.getSpans(start, end, StyleSpan.class);
@@ -185,21 +257,21 @@ public class NoteEditingActivity extends AppCompatActivity {
 
 
     public void buttonAlignmentLeft(View view){
-        editText.setTextAlignment(View.TEXT_ALIGNMENT_TEXT_START);
-        Spannable spannableString = new SpannableStringBuilder(editText.getText());
-        editText.setText(spannableString);
+        editContent.setTextAlignment(View.TEXT_ALIGNMENT_TEXT_START);
+        Spannable spannableString = new SpannableStringBuilder(editContent.getText());
+        editContent.setText(spannableString);
     }
 
     public void buttonAlignmentCenter(View view){
-        editText.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-        Spannable spannableString = new SpannableStringBuilder(editText.getText());
-        editText.setText(spannableString);
+        editContent.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+        Spannable spannableString = new SpannableStringBuilder(editContent.getText());
+        editContent.setText(spannableString);
     }
 
     public void buttonAlignmentRight(View view){
-        editText.setTextAlignment(View.TEXT_ALIGNMENT_TEXT_END);
-        Spannable spannableString = new SpannableStringBuilder(editText.getText());
-        editText.setText(spannableString);
+        editContent.setTextAlignment(View.TEXT_ALIGNMENT_TEXT_END);
+        Spannable spannableString = new SpannableStringBuilder(editContent.getText());
+        editContent.setText(spannableString);
     }
 
 }
