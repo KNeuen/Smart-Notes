@@ -181,7 +181,7 @@ public class NoteEditingActivity extends AppCompatActivity {
         SharedPreferences sharedPreferences = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
 
-        Log.d("Saved", note.getContent());
+        //Log.d("Saved", note.getContent());
 
         editor.putInt(KEY_NOTE_COUNT, noteList.size());
         for (int i = 0; i < noteList.size(); i++) {

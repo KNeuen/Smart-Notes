@@ -267,7 +267,7 @@ public class MainActivity extends AppCompatActivity {
 
             String id = sharedPreferences.getString("tag_id" + i, "");
             String name = sharedPreferences.getString("tag_name" + i, "");
-            Log.d("why", name);
+            //Log.d("why", name);
             String color = sharedPreferences.getString("tag_color" + i, ""); //Retrieve Color
 
             String json_list = sharedPreferences.getString("tag_note_list" + i, "");
