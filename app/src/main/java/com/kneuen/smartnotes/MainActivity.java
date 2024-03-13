@@ -8,6 +8,7 @@ import androidx.biometric.BiometricPrompt;
 import androidx.core.content.ContextCompat;
 
 import android.annotation.SuppressLint;
+import android.app.DatePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -445,24 +446,33 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void showNoteOptionsDialog(final Note note) {
-        String[] options = note.isPinned() ? new String[]{"Delete", "Unpin", "Change Tag"} : new String[]{"Delete", "Pin", "Change Tag"};
+        String[] options = note.isPinned() ?
+                new String[]{"Delete", "Unpin", "Change Tag", "Change Date"} :
+                new String[]{"Delete", "Pin", "Change Tag", "Change Date"};
+
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Note Options");
         builder.setItems(options, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                if (which == 0) { // Delete option
-                    showDeleteDialog(note);
-                } else if (which == 1) { // Pin/Unpin option
-                    if (note.isPinned()) {
-                        unpinNote(note);
-                    } else {
-                        pinNote(note);
-                    }
-                } else if (which == 2) {
-                    selectTag(note);
+                switch (which) {
+                    case 0: // Delete
+                        showDeleteDialog(note);
+                        break;
+                    case 1: // Pin/Unpin
+                        if (note.isPinned()) {
+                            unpinNote(note);
+                        } else {
+                            pinNote(note);
+                        }
+                        break;
+                    case 2: // Change Tag
+                        selectTag(note);
+                        break;
+                    case 3: // Change Date
+                        changeNoteDate(note);
+                        break;
                 }
-
             }
         });
 
@@ -670,6 +680,25 @@ public class MainActivity extends AppCompatActivity {
         } else {
             notifyUser("Alarm app is not available");
         }
+    }
+
+    private void changeNoteDate(Note note) {
+        Calendar calendar = Calendar.getInstance();
+        DatePickerDialog datePickerDialog = new DatePickerDialog(this,
+                new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                        calendar.set(Calendar.YEAR, year);
+                        calendar.set(Calendar.MONTH, month);
+                        calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+
+                        // Update the note's creation time
+                        note.setCreationTime(calendar.getTimeInMillis());
+                        saveToPreferences();
+                        refreshNoteViews();
+                    }
+                }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
+        datePickerDialog.show();
     }
 
 
