@@ -369,6 +369,9 @@ public class MainActivity extends AppCompatActivity {
                     note.setTitle(editTitle.getText().toString());
                     note.setContent("");
 
+                    // After saving the note, set a calendar event
+                    addEventToCalendar(note);
+
                     if (datePicker.getVisibility() == View.VISIBLE) {
                         // Get the date and time from the DatePicker and TimePicker
                         Calendar calendar = Calendar.getInstance();
@@ -649,7 +652,7 @@ public class MainActivity extends AppCompatActivity {
         if (intent.resolveActivity(getPackageManager()) != null) {
             startActivity(intent);
         } else {
-            // Handle the case where the calendar app is not available.
+            notifyUser("Calendar app is not available");
         }
     }
 
@@ -665,7 +668,7 @@ public class MainActivity extends AppCompatActivity {
         if (intent.resolveActivity(getPackageManager()) != null) {
             startActivity(intent);
         } else {
-            // Handle the case where the alarm app is not available.
+            notifyUser("Alarm app is not available");
         }
     }
 
