@@ -14,10 +14,12 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.Html;
+import android.text.Layout;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.TextPaint;
 import android.text.TextWatcher;
+import android.text.style.AlignmentSpan;
 import android.text.style.ClickableSpan;
 import android.util.Log;
 import android.util.Patterns;
@@ -257,21 +259,42 @@ public class NoteEditingActivity extends AppCompatActivity {
 
 
     public void buttonAlignmentLeft(View view){
-        editContent.setTextAlignment(View.TEXT_ALIGNMENT_TEXT_START);
         Spannable spannableString = new SpannableStringBuilder(editContent.getText());
-        editContent.setText(spannableString);
+        spannableString.setSpan(new AlignmentSpan.Standard(Layout.Alignment.ALIGN_NORMAL),
+                editContent.getSelectionStart(),
+                editContent.getSelectionEnd(),
+                Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+
+        note.setContent(Html.toHtml(spannableString, Html.TO_HTML_PARAGRAPH_LINES_INDIVIDUAL));
+        saveNotesToPreferences();
+
+        refreshContentText(spannableString);
     }
 
     public void buttonAlignmentCenter(View view){
-        editContent.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
         Spannable spannableString = new SpannableStringBuilder(editContent.getText());
-        editContent.setText(spannableString);
+        spannableString.setSpan(new AlignmentSpan.Standard(Layout.Alignment.ALIGN_CENTER),
+                editContent.getSelectionStart(),
+                editContent.getSelectionEnd(),
+                Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+
+        note.setContent(Html.toHtml(spannableString, Html.TO_HTML_PARAGRAPH_LINES_INDIVIDUAL));
+        saveNotesToPreferences();
+
+        refreshContentText(spannableString);
     }
 
     public void buttonAlignmentRight(View view){
-        editContent.setTextAlignment(View.TEXT_ALIGNMENT_TEXT_END);
         Spannable spannableString = new SpannableStringBuilder(editContent.getText());
-        editContent.setText(spannableString);
+        spannableString.setSpan(new AlignmentSpan.Standard(Layout.Alignment.ALIGN_OPPOSITE),
+                editContent.getSelectionStart(),
+                editContent.getSelectionEnd(),
+                Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+
+        note.setContent(Html.toHtml(spannableString, Html.TO_HTML_PARAGRAPH_LINES_INDIVIDUAL));
+        saveNotesToPreferences();
+
+        refreshContentText(spannableString);
     }
 
 }
