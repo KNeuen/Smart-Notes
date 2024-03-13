@@ -20,4 +20,12 @@
         <!-- Inherits properties from TextAlignmentButton -->
         <!-- Add or override specific properties for text style buttons -->
     </style>
+
+    <style name="AppButtonStyle">
+        <item name="android:background">@color/primaryBlue</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:layout_margin">16dp</item>
+        <item name="android:padding">12dp</item>
+        <item name="android:radius">4dp</item>
+    </style>
 </resources>

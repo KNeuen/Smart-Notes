@@ -4,4 +4,8 @@
     <color name="white">#FFFFFFFF</color>
     <color name="Pink">#FFC0CB</color>
     <color name="Purple">#800080</color>
+    <color name="primaryBlue">#007bff</color>
+    <color name="secondaryBlue">#70cfff</color>
+    <color name="backgroundGrey">#f8f9fa</color>
+    <color name="textGrey">#343a40</color>
 </resources>
